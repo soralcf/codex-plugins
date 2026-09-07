@@ -1,11 +1,17 @@
 {
   "name": "learn-anything",
-  "version": "0.1.0",
+  "version": "0.1.0+codex.20260907184414",
   "description": "Turn any named topic into a structured, evidence-aware learning guide.",
   "author": {
     "name": "Welkin"
   },
-  "keywords": ["learning", "study", "explanation", "roadmap", "notes"],
+  "keywords": [
+    "learning",
+    "study",
+    "explanation",
+    "roadmap",
+    "notes"
+  ],
   "skills": "./skills/",
   "interface": {
     "displayName": "Learn Anything",
@@ -13,11 +19,16 @@
     "longDescription": "Enter a topic to get an adaptive learning guide covering its essence, purpose, mechanics, examples, boundaries, trade-offs, and a practical next-step roadmap.",
     "developerName": "Welkin",
     "category": "Education",
-    "capabilities": ["Learning", "Research"],
+    "capabilities": [
+      "Learning",
+      "Research"
+    ],
+    "composerIcon": "./assets/icon.png",
+    "logo": "./assets/icon.png",
     "defaultPrompt": [
-      "帮我学习 Go GMP 调度器",
-      "帮我理解软件架构中的模块化",
-      "给我一份 GitLens 学习卡"
+      "\u5e2e\u6211\u5b66\u4e60 Go GMP \u8c03\u5ea6\u5668",
+      "\u5e2e\u6211\u7406\u89e3\u8f6f\u4ef6\u67b6\u6784\u4e2d\u7684\u6a21\u5757\u5316",
+      "\u7ed9\u6211\u4e00\u4efd GitLens \u5b66\u4e60\u5361"
     ]
   }
 }
