@@ -1,0 +1,23 @@
+{
+  "name": "learn-anything",
+  "version": "0.1.0",
+  "description": "Turn any named topic into a structured, evidence-aware learning guide.",
+  "author": {
+    "name": "Welkin"
+  },
+  "keywords": ["learning", "study", "explanation", "roadmap", "notes"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Learn Anything",
+    "shortDescription": "Learn any topic through structured notes and examples.",
+    "longDescription": "Enter a topic to get an adaptive learning guide covering its essence, purpose, mechanics, examples, boundaries, trade-offs, and a practical next-step roadmap.",
+    "developerName": "Welkin",
+    "category": "Education",
+    "capabilities": ["Learning", "Research"],
+    "defaultPrompt": [
+      "帮我学习 Go GMP 调度器",
+      "帮我理解软件架构中的模块化",
+      "给我一份 GitLens 学习卡"
+    ]
+  }
+}

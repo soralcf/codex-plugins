@@ -13,3 +13,11 @@ codex plugin marketplace add soralcf/codex-plugins --ref main
 ```bash
 codex plugin add <plugin-name>@soralcf
 ```
+
+## Plugins
+
+- `learn-anything` — Turn any named topic into a structured, evidence-aware learning guide.
+
+```bash
+codex plugin add learn-anything@soralcf
+```
