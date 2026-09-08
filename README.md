@@ -16,7 +16,7 @@ codex plugin add <plugin-name>@soralcf
 
 ## Plugins
 
-- `learn-anything` — Turn any named topic into a structured, evidence-aware learning guide.
+- `learn-anything` — Learn any topic through adaptive explanations, guided practice, and practical roadmaps.
 
 ```bash
 codex plugin add learn-anything@soralcf

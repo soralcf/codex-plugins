@@ -1,7 +1,7 @@
 {
   "name": "learn-anything",
-  "version": "0.1.0+codex.20260907184414",
-  "description": "Turn any named topic into a structured, evidence-aware learning guide.",
+  "version": "0.1.0+codex.20260908165933",
+  "description": "Learn any topic through adaptive explanations, guided practice, and practical roadmaps.",
   "author": {
     "name": "Welkin"
   },
@@ -15,8 +15,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Learn Anything",
-    "shortDescription": "Learn any topic through structured notes and examples.",
-    "longDescription": "Enter a topic to get an adaptive learning guide covering its essence, purpose, mechanics, examples, boundaries, trade-offs, and a practical next-step roadmap.",
+    "shortDescription": "Learn any topic with adaptive explanations and practice.",
+    "longDescription": "Build a useful mental model through a quick explanation, guided deep dive, or learning roadmap adapted to your goals, prior knowledge, and preferred language.",
     "developerName": "Welkin",
     "category": "Education",
     "capabilities": [
@@ -26,9 +26,9 @@
     "composerIcon": "./assets/icon.png",
     "logo": "./assets/icon.png",
     "defaultPrompt": [
-      "\u5e2e\u6211\u5b66\u4e60 Go GMP \u8c03\u5ea6\u5668",
-      "\u5e2e\u6211\u7406\u89e3\u8f6f\u4ef6\u67b6\u6784\u4e2d\u7684\u6a21\u5757\u5316",
-      "\u7ed9\u6211\u4e00\u4efd GitLens \u5b66\u4e60\u5361"
+      "Help me understand a topic from first principles",
+      "Build a learning roadmap for a subject I want to study",
+      "Teach me a practical skill with a small exercise"
     ]
   }
 }
