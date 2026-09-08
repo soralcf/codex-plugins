@@ -1,0 +1,232 @@
+{
+  "schemaVersion": 1,
+  "sources": {
+    "mattpocock": {
+      "repository": "https://github.com/mattpocock/skills.git",
+      "branch": "main",
+      "license": "MIT",
+      "licensePath": "LICENSE",
+      "plugin": "vendor-mattpocock",
+      "lockPath": "plugins/vendor-mattpocock/UPSTREAM.lock.json",
+      "exclusions": [
+        {
+          "name": "ask-matt",
+          "path": "skills/engineering/ask-matt",
+          "reason": "Matt-specific router; replaced by the original workflow-guide."
+        },
+        {
+          "name": "setup-matt-pocock-skills",
+          "path": "skills/engineering/setup-matt-pocock-skills",
+          "reason": "Installs Matt-specific repository, issue-tracker, and documentation conventions."
+        },
+        {
+          "name": "triage",
+          "path": "skills/engineering/triage",
+          "reason": "Depends on the excluded Matt-specific issue-tracker setup."
+        },
+        {
+          "name": "to-spec",
+          "path": "skills/engineering/to-spec",
+          "reason": "Depends on the excluded Matt-specific issue-tracker setup."
+        },
+        {
+          "name": "to-tickets",
+          "path": "skills/engineering/to-tickets",
+          "reason": "Depends on the excluded Matt-specific issue-tracker setup."
+        },
+        {
+          "name": "wayfinder",
+          "path": "skills/engineering/wayfinder",
+          "reason": "Depends on the excluded Matt-specific issue-tracker setup."
+        },
+        {
+          "name": "code-review",
+          "path": "skills/engineering/code-review",
+          "reason": "Requires the excluded issue-tracker setup when its repository configuration is absent."
+        },
+        {
+          "name": "implement",
+          "path": "skills/engineering/implement",
+          "reason": "Orchestrates excluded spec, ticket, and code-review conventions."
+        },
+        {
+          "name": "grill-with-docs",
+          "path": "skills/engineering/grill-with-docs",
+          "reason": "Unchanged user-invocation frontmatter is rejected by the Codex plugin validator."
+        },
+        {
+          "name": "improve-codebase-architecture",
+          "path": "skills/engineering/improve-codebase-architecture",
+          "reason": "Unchanged user-invocation frontmatter is rejected by the Codex plugin validator."
+        },
+        {
+          "name": "grill-me",
+          "path": "skills/productivity/grill-me",
+          "reason": "Unchanged user-invocation frontmatter is rejected by the Codex plugin validator."
+        },
+        {
+          "name": "to-questionnaire",
+          "path": "skills/productivity/to-questionnaire",
+          "reason": "Unchanged user-invocation frontmatter is rejected by the Codex plugin validator."
+        },
+        {
+          "name": "wait-what",
+          "path": "skills/productivity/wait-what",
+          "reason": "Unchanged user-invocation frontmatter is rejected by the Codex plugin validator."
+        },
+        {
+          "name": "teach",
+          "path": "skills/productivity/teach",
+          "reason": "Overlaps the existing original learn-anything skill."
+        },
+        {
+          "name": "handoff",
+          "path": "skills/productivity/handoff",
+          "reason": "Overlaps Codex's native task and handoff capabilities."
+        }
+      ]
+    }
+  },
+  "skills": [
+    {
+      "name": "learn-anything",
+      "plugin": "learn-anything",
+      "ownership": "original",
+      "scope": "plugin",
+      "invocation": "model",
+      "status": "active",
+      "path": "plugins/learn-anything/skills/learn-anything",
+      "requires": []
+    },
+    {
+      "name": "workflow-guide",
+      "plugin": "workflow-hub",
+      "ownership": "original",
+      "scope": "plugin",
+      "invocation": "user",
+      "status": "active",
+      "path": "plugins/workflow-hub/skills/workflow-guide",
+      "requires": []
+    },
+    {
+      "name": "skill-maintainer",
+      "plugin": null,
+      "ownership": "original",
+      "scope": "repository",
+      "invocation": "model",
+      "status": "active",
+      "path": ".agents/skills/skill-maintainer",
+      "requires": []
+    },
+    {
+      "name": "codebase-design",
+      "plugin": "vendor-mattpocock",
+      "ownership": "vendored",
+      "scope": "plugin",
+      "invocation": "model",
+      "status": "active",
+      "path": "plugins/vendor-mattpocock/skills/codebase-design",
+      "origin": {"source": "mattpocock", "path": "skills/engineering/codebase-design"},
+      "requires": []
+    },
+    {
+      "name": "diagnosing-bugs",
+      "plugin": "vendor-mattpocock",
+      "ownership": "vendored",
+      "scope": "plugin",
+      "invocation": "model",
+      "status": "active",
+      "path": "plugins/vendor-mattpocock/skills/diagnosing-bugs",
+      "origin": {"source": "mattpocock", "path": "skills/engineering/diagnosing-bugs"},
+      "requires": []
+    },
+    {
+      "name": "domain-modeling",
+      "plugin": "vendor-mattpocock",
+      "ownership": "vendored",
+      "scope": "plugin",
+      "invocation": "model",
+      "status": "active",
+      "path": "plugins/vendor-mattpocock/skills/domain-modeling",
+      "origin": {"source": "mattpocock", "path": "skills/engineering/domain-modeling"},
+      "requires": []
+    },
+    {
+      "name": "prototype",
+      "plugin": "vendor-mattpocock",
+      "ownership": "vendored",
+      "scope": "plugin",
+      "invocation": "model",
+      "status": "active",
+      "path": "plugins/vendor-mattpocock/skills/prototype",
+      "origin": {"source": "mattpocock", "path": "skills/engineering/prototype"},
+      "requires": []
+    },
+    {
+      "name": "research",
+      "plugin": "vendor-mattpocock",
+      "ownership": "vendored",
+      "scope": "plugin",
+      "invocation": "model",
+      "status": "active",
+      "path": "plugins/vendor-mattpocock/skills/research",
+      "origin": {"source": "mattpocock", "path": "skills/engineering/research"},
+      "requires": []
+    },
+    {
+      "name": "resolving-merge-conflicts",
+      "plugin": "vendor-mattpocock",
+      "ownership": "vendored",
+      "scope": "plugin",
+      "invocation": "model",
+      "status": "active",
+      "path": "plugins/vendor-mattpocock/skills/resolving-merge-conflicts",
+      "origin": {"source": "mattpocock", "path": "skills/engineering/resolving-merge-conflicts"},
+      "requires": []
+    },
+    {
+      "name": "tdd",
+      "plugin": "vendor-mattpocock",
+      "ownership": "vendored",
+      "scope": "plugin",
+      "invocation": "model",
+      "status": "active",
+      "path": "plugins/vendor-mattpocock/skills/tdd",
+      "origin": {"source": "mattpocock", "path": "skills/engineering/tdd"},
+      "requires": []
+    },
+    {
+      "name": "wizard",
+      "plugin": "vendor-mattpocock",
+      "ownership": "vendored",
+      "scope": "plugin",
+      "invocation": "model",
+      "status": "active",
+      "path": "plugins/vendor-mattpocock/skills/wizard",
+      "origin": {"source": "mattpocock", "path": "skills/engineering/wizard"},
+      "requires": []
+    },
+    {
+      "name": "grilling",
+      "plugin": "vendor-mattpocock",
+      "ownership": "vendored",
+      "scope": "plugin",
+      "invocation": "model",
+      "status": "active",
+      "path": "plugins/vendor-mattpocock/skills/grilling",
+      "origin": {"source": "mattpocock", "path": "skills/productivity/grilling"},
+      "requires": []
+    },
+    {
+      "name": "writing-for-agents",
+      "plugin": "vendor-mattpocock",
+      "ownership": "vendored",
+      "scope": "plugin",
+      "invocation": "model",
+      "status": "active",
+      "path": "plugins/vendor-mattpocock/skills/writing-for-agents",
+      "origin": {"source": "mattpocock", "path": "skills/productivity/writing-for-agents"},
+      "requires": []
+    }
+  ]
+}

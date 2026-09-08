@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "source": "mattpocock",
+  "repository": "https://github.com/mattpocock/skills.git",
+  "branch": "main",
+  "commit": "3cca18b368ae95cdbdebbff572ccafa662551015",
+  "committedAt": "2026-09-04T09:43:27+01:00",
+  "license": "MIT",
+  "licensePath": "LICENSE",
+  "skills": [
+    {
+      "name": "codebase-design",
+      "sourcePath": "skills/engineering/codebase-design",
+      "treeSha256": "826e65f8d718794b0647dd50122d3c388c6e860c608d6aa313d7d716ff535933"
+    },
+    {
+      "name": "diagnosing-bugs",
+      "sourcePath": "skills/engineering/diagnosing-bugs",
+      "treeSha256": "3eaddfa5b028a2d4ca47731bb7a64cae28a0e8cb1ca802d201e754a1cc23d5a3"
+    },
+    {
+      "name": "domain-modeling",
+      "sourcePath": "skills/engineering/domain-modeling",
+      "treeSha256": "2cc88b237a4704f9fe2057492024856a48ea803a5b9257b1c1e3174eb1f13a09"
+    },
+    {
+      "name": "grilling",
+      "sourcePath": "skills/productivity/grilling",
+      "treeSha256": "d5833e50e0081bbf5133b6c6b61aa8ba9ffae66e9071404b61e45b18f4cdb57e"
+    },
+    {
+      "name": "prototype",
+      "sourcePath": "skills/engineering/prototype",
+      "treeSha256": "c4efd5e0f1c302b6225be83e8e42abdb05e13fde900484e4e2240e90b4e83eb6"
+    },
+    {
+      "name": "research",
+      "sourcePath": "skills/engineering/research",
+      "treeSha256": "b1976e3b4a7cdcee2f7ade52c0cf072bafdbac9cf3284568cab1aa258e584e69"
+    },
+    {
+      "name": "resolving-merge-conflicts",
+      "sourcePath": "skills/engineering/resolving-merge-conflicts",
+      "treeSha256": "9072fa5a56004c0c6abfa073dfb2629c9ac49118d38406b65f6313f0b8f45711"
+    },
+    {
+      "name": "tdd",
+      "sourcePath": "skills/engineering/tdd",
+      "treeSha256": "2da488cb71308948f58928bbbae6d55d060d5414d5bb3ec7ee7d4bb73c670442"
+    },
+    {
+      "name": "wizard",
+      "sourcePath": "skills/engineering/wizard",
+      "treeSha256": "fd918004158f826ab85f20a69b75677be74dcbcea19066c4f2511b52fcd5af3a"
+    },
+    {
+      "name": "writing-for-agents",
+      "sourcePath": "skills/productivity/writing-for-agents",
+      "treeSha256": "dc53f07d1f662137317789b9b5d74cfcc26dbcfc15038a7faf676c844d8638e8"
+    }
+  ]
+}

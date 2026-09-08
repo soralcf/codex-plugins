@@ -15,6 +15,30 @@
         "authentication": "ON_INSTALL"
       },
       "category": "Education"
+    },
+    {
+      "name": "vendor-mattpocock",
+      "source": {
+        "source": "local",
+        "path": "./plugins/vendor-mattpocock"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "workflow-hub",
+      "source": {
+        "source": "local",
+        "path": "./plugins/workflow-hub"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
     }
   ]
 }

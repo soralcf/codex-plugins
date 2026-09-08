@@ -1,0 +1,32 @@
+{
+  "name": "workflow-hub",
+  "version": "0.1.0+codex.20260908182847",
+  "description": "Navigate, understand, and audit Welkin's personal skill workflows.",
+  "author": {
+    "name": "Welkin"
+  },
+  "repository": "https://github.com/soralcf/codex-plugins",
+  "keywords": [
+    "workflow",
+    "routing",
+    "skills",
+    "catalog"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Workflow Hub",
+    "shortDescription": "Navigate and audit the personal skill library.",
+    "longDescription": "A human-invoked guide that maps goals to installed skills, explains how workflows compose, and identifies gaps or overlap without mutating the library.",
+    "developerName": "Welkin",
+    "category": "Productivity",
+    "capabilities": [
+      "Workflow Navigation",
+      "Skill Audit"
+    ],
+    "defaultPrompt": [
+      "Show me which workflow fits my current task",
+      "Explain how my engineering skills work together",
+      "Audit my skill library for overlap or missing links"
+    ]
+  }
+}

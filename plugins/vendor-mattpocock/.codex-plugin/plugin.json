@@ -1,0 +1,35 @@
+{
+  "name": "vendor-mattpocock",
+  "version": "0.1.0+upstream.3cca18b",
+  "description": "A curated, unmodified subset of Matt Pocock's engineering and productivity skills.",
+  "author": {
+    "name": "Matt Pocock; packaged by Welkin",
+    "url": "https://github.com/mattpocock/skills"
+  },
+  "homepage": "https://github.com/mattpocock/skills",
+  "repository": "https://github.com/soralcf/codex-plugins",
+  "license": "MIT",
+  "keywords": [
+    "engineering",
+    "workflow",
+    "skills",
+    "vendored"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Matt Pocock Skills",
+    "shortDescription": "Curated upstream engineering workflows, kept unchanged.",
+    "longDescription": "A pinned and license-preserving selection of Matt Pocock's stable skills. Vendored skill directories are copied unchanged and updated as complete units.",
+    "developerName": "Matt Pocock / Welkin",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Engineering",
+      "Productivity"
+    ],
+    "defaultPrompt": [
+      "Diagnose a difficult bug with a disciplined feedback loop",
+      "Stress-test a design before implementation",
+      "Review a codebase for deeper module seams"
+    ]
+  }
+}
