@@ -157,6 +157,12 @@ def write_catalog(catalog: Catalog, apply: bool) -> int:
         return 0
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(output, encoding="utf-8")
+    manifest_path = catalog.root / "plugins/workflow-hub/.codex-plugin/plugin.json"
+    manifest = load_json(manifest_path)
+    base_version = manifest["version"].split("+")[0]
+    catalog_digest = hashlib.sha256(output.encode()).hexdigest()[:12]
+    manifest["version"] = f"{base_version}+catalog.{catalog_digest}"
+    atomic_json(manifest_path, manifest)
     print(f"updated {target.relative_to(catalog.root)}")
     return 0
 
@@ -367,7 +373,9 @@ def sync_vendor(catalog: Catalog, source_id: str, ref: str | None, apply: bool) 
         manifest_path = plugin_root / ".codex-plugin/plugin.json"
         manifest = load_json(manifest_path)
         base_version = manifest["version"].split("+")[0]
-        manifest["version"] = f"{base_version}+upstream.{commit[:7]}"
+        selection_payload = json.dumps(lock_skills, sort_keys=True, separators=(",", ":")).encode()
+        selection_digest = hashlib.sha256(selection_payload).hexdigest()[:12]
+        manifest["version"] = f"{base_version}+upstream.{commit[:7]}.selection.{selection_digest}"
         atomic_json(manifest_path, manifest)
         write_catalog(catalog, True)
         print("sync applied")

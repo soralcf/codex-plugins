@@ -32,6 +32,8 @@ validator; adapting that metadata would no longer be an unmodified vendored copy
 - Replace the complete vendored `skills/` tree, not individual files.
 - Refresh content hashes, the upstream commit, preserved license, plugin cachebuster, and generated
   workflow catalog in the same operation.
+- Derive cachebusters from both the upstream commit and selected-content hash, so changing the
+  selection at the same commit cannot reuse a stale installed cache.
 - Review the upstream diff before applying a new commit.
 
 ## Removal requirements

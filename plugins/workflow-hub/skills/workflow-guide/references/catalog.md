@@ -82,13 +82,6 @@
 - Chain: `wizard`
 - Outcome: 把必须由人完成的配置或迁移步骤做成交互式脚本。
 
-### 编写给 Agent 使用的文档
-
-- ID: `write-agent-instructions`
-- Entry: `$writing-for-agents`
-- Chain: `writing-for-agents`
-- Outcome: 产出触发清晰、上下文成本合理的 Skill 或 Agent 文档。
-
 ## Skills
 
 | Skill | Invocation | Ownership | Source |
@@ -105,7 +98,6 @@
 | `tdd` | model | vendored | mattpocock@3cca18b |
 | `wizard` | model | vendored | mattpocock@3cca18b |
 | `workflow-guide` | user | original | this repository |
-| `writing-for-agents` | model | vendored | mattpocock@3cca18b |
 
 ## Deliberate upstream exclusions
 
@@ -124,6 +116,7 @@
 - `triage` (mattpocock): Depends on the excluded Matt-specific issue-tracker setup.
 - `wait-what` (mattpocock): Unchanged user-invocation frontmatter is rejected by the Codex plugin validator.
 - `wayfinder` (mattpocock): Depends on the excluded Matt-specific issue-tracker setup.
+- `writing-for-agents` (mattpocock): Its unchanged Skill-authoring guidance uses Claude-specific invocation metadata rejected by Codex and overlaps the official skill-creator.
 
 ## Static audit
 

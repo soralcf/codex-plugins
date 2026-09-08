@@ -52,11 +52,6 @@
       "name": "wizard",
       "sourcePath": "skills/engineering/wizard",
       "treeSha256": "fd918004158f826ab85f20a69b75677be74dcbcea19066c4f2511b52fcd5af3a"
-    },
-    {
-      "name": "writing-for-agents",
-      "sourcePath": "skills/productivity/writing-for-agents",
-      "treeSha256": "dc53f07d1f662137317789b9b5d74cfcc26dbcfc15038a7faf676c844d8638e8"
     }
   ]
 }

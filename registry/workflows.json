@@ -77,13 +77,6 @@
       "entry": "wizard",
       "skills": ["wizard"],
       "outcome": "把必须由人完成的配置或迁移步骤做成交互式脚本。"
-    },
-    {
-      "id": "write-agent-instructions",
-      "title": "编写给 Agent 使用的文档",
-      "entry": "writing-for-agents",
-      "skills": ["writing-for-agents"],
-      "outcome": "产出触发清晰、上下文成本合理的 Skill 或 Agent 文档。"
     }
   ]
 }

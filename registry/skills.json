@@ -83,6 +83,11 @@
           "name": "handoff",
           "path": "skills/productivity/handoff",
           "reason": "Overlaps Codex's native task and handoff capabilities."
+        },
+        {
+          "name": "writing-for-agents",
+          "path": "skills/productivity/writing-for-agents",
+          "reason": "Its unchanged Skill-authoring guidance uses Claude-specific invocation metadata rejected by Codex and overlaps the official skill-creator."
         }
       ]
     }
@@ -215,17 +220,6 @@
       "status": "active",
       "path": "plugins/vendor-mattpocock/skills/grilling",
       "origin": {"source": "mattpocock", "path": "skills/productivity/grilling"},
-      "requires": []
-    },
-    {
-      "name": "writing-for-agents",
-      "plugin": "vendor-mattpocock",
-      "ownership": "vendored",
-      "scope": "plugin",
-      "invocation": "model",
-      "status": "active",
-      "path": "plugins/vendor-mattpocock/skills/writing-for-agents",
-      "origin": {"source": "mattpocock", "path": "skills/productivity/writing-for-agents"},
       "requires": []
     }
   ]
