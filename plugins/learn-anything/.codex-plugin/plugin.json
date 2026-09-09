@@ -1,10 +1,13 @@
 {
   "name": "learn-anything",
-  "version": "0.1.0+codex.20260908165933",
+  "version": "0.1.0+codex.20260909051415",
   "description": "Learn any topic through adaptive explanations, guided practice, and practical roadmaps.",
   "author": {
-    "name": "Welkin"
+    "name": "Welkin",
+    "url": "https://github.com/soralcf"
   },
+  "homepage": "https://github.com/soralcf/codex-plugins/tree/main/plugins/learn-anything",
+  "repository": "https://github.com/soralcf/codex-plugins",
   "keywords": [
     "learning",
     "study",

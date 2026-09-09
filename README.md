@@ -1,11 +1,17 @@
 # Soralcf Codex Plugins
 
-Private Codex plugin marketplace for personal plugins.
+Public Codex plugin marketplace for reusable skills and personal workflows.
+
+## Clone the repository
+
+```bash
+git clone https://github.com/soralcf/codex-plugins.git
+```
 
 ## Add the marketplace
 
 ```bash
-codex plugin marketplace add soralcf/codex-plugins --ref main
+codex plugin marketplace add https://github.com/soralcf/codex-plugins.git --ref main
 ```
 
 ## Install a plugin
