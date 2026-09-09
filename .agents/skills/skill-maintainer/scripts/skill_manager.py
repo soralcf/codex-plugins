@@ -31,15 +31,38 @@ def atomic_json(path: Path, value) -> None:
     os.replace(temporary, path)
 
 
-def tree_digest(directory: Path) -> str:
+def tree_digest(directory: Path, exclude: tuple[str, ...] = (), overrides: dict | None = None) -> str:
     digest = hashlib.sha256()
     for path in sorted(item for item in directory.rglob("*") if item.is_file()):
+        if path.relative_to(directory).as_posix() in exclude:
+            continue
         relative = path.relative_to(directory).as_posix().encode()
         digest.update(relative)
         digest.update(b"\0")
-        digest.update(path.read_bytes())
+        digest.update((overrides or {}).get(path.relative_to(directory).as_posix(), path.read_bytes()))
         digest.update(b"\0")
     return digest.hexdigest()
+
+
+def codex_overlay(item: dict) -> str:
+    """Add host metadata without rewriting any upstream file."""
+    metadata = item["codex"]
+    return (
+        "interface:\n"
+        f"  display_name: {json.dumps(metadata['displayName'], ensure_ascii=False)}\n"
+        f"  short_description: {json.dumps(metadata['shortDescription'], ensure_ascii=False)}\n"
+        f"  default_prompt: {json.dumps('Use $vendor-mattpocock:' + item['name'] + ' for this task.')}\n"
+        "policy:\n"
+        f"  allow_implicit_invocation: {'false' if item['invocation'] == 'user' else 'true'}\n"
+    )
+
+
+def skill_relative_path(catalog: 'Catalog', item: dict) -> Path:
+    base = Path('plugins') / item['plugin'] / 'skills'
+    relative = Path(item['path']).relative_to(base)
+    if '..' in relative.parts or relative.name != item['name']:
+        raise ValueError(f"invalid skill path: {item['path']}")
+    return relative
 
 
 def frontmatter_name(skill_dir: Path) -> str | None:
@@ -110,7 +133,11 @@ def render_catalog(catalog: Catalog) -> str:
             "",
         ])
 
-    lines.extend(["## Skills", "", "| Skill | Invocation | Ownership | Source |", "|---|---|---|---|"])
+    lines.extend(["## Matt stage navigation", "", "Stage numbers are navigation, not mandatory execution order. See the Matt plugin's README.md and PROJECT-SETUP.md for routes and project prerequisites.", ""])
+    for stage in catalog.skills_doc.get('stages', []):
+        members = [item for item in catalog.skills_doc['skills'] if item.get('stage') == stage['id']]
+        lines.append(f"- **{stage['id']} — {stage['title']}**: " + ', '.join(f"`{item['name']}`" for item in members))
+    lines.extend(["", "## Skills", "", "| Skill | Invocation | Ownership | Source |", "|---|---|---|---|"])
     for item in sorted(catalog.skills_doc["skills"], key=lambda value: value["name"]):
         origin = item.get("origin")
         if origin:
@@ -149,6 +176,28 @@ def render_catalog(catalog: Catalog) -> str:
     return "\n".join(lines)
 
 
+def render_stage_guide(catalog: Catalog) -> str:
+    lines = ['# Matt Pocock Skills：按工作阶段选择', '',
+             '> 从 registry/skills.json 生成。编号表示常用阶段，不是必须依次执行的步骤。', '',
+             '每个 skill 仅保存一份；学习、领域建模、测试、交接可以在任何阶段按需进入。', '',
+             '先看 [常用路线](WORKFLOWS.md)，需要 tracker 的项目先看 [项目接入](PROJECT-SETUP.md)。', '',
+             '上游 SKILL.md、配套文档、脚本与资源保持原样。仅 agents/openai.yaml 作 Codex 适配；原始 YAML 保存在 UPSTREAM.lock.json，原始树与打包树分别校验。', '']
+    for stage in catalog.skills_doc.get('stages', []):
+        lines += [f"## {stage['id']} · {stage['title']}", '', '| Skill | 任务类型 | 调用方式 |', '|---|---|---|']
+        for item in catalog.selected('mattpocock'):
+            if item.get('stage') != stage['id']: continue
+            path = skill_relative_path(catalog, item).as_posix()
+            mode = '显式调用' if item['invocation'] == 'user' else '自动匹配或显式调用'
+            lines.append(f"| [{item['name']}](skills/{path}/SKILL.md) | {item['codex']['shortDescription']} | {mode} |")
+        lines.append('')
+    lines += ['## 技能依赖与项目先决条件', '', '这些是运行时调用依赖，不代表用户需要提前手动执行。分支使用的技能列入依赖，以便安装和移除检查保证流程完整。', '', '| Skill | 调用依赖 | 项目前提 |', '|---|---|---|']
+    for item in catalog.selected('mattpocock'):
+        if item.get('requires') or item.get('prerequisites'):
+            lines.append(f"| `{item['name']}` | {', '.join('`'+n+'`' for n in item.get('requires', [])) or '—'} | {'; '.join(item.get('prerequisites', [])) or '—'} |")
+    lines += ['', '依赖 setup-matt-pocock-skills 的配置要求由项目接入文档说明；该 setup skill 未安装。YAML 不能替代项目配置，也不改变上游发布、提交或教学产物行为。', '']
+    return '\n'.join(lines)
+
+
 def write_catalog(catalog: Catalog, apply: bool) -> int:
     output = render_catalog(catalog)
     target = catalog.root / "plugins/workflow-hub/skills/workflow-guide/references/catalog.md"
@@ -157,6 +206,8 @@ def write_catalog(catalog: Catalog, apply: bool) -> int:
         return 0
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(output, encoding="utf-8")
+    if catalog.skills_doc.get('stages'):
+        (catalog.root / 'plugins/vendor-mattpocock/README.md').write_text(render_stage_guide(catalog), encoding='utf-8')
     manifest_path = catalog.root / "plugins/workflow-hub/.codex-plugin/plugin.json"
     manifest = load_json(manifest_path)
     base_version = manifest["version"].split("+")[0]
@@ -174,9 +225,14 @@ def validate(catalog: Catalog) -> int:
     duplicates = sorted({name for name in names if names.count(name) > 1})
     if duplicates:
         errors.append("duplicate registry names: " + ", ".join(duplicates))
+    stages = {stage['id'] for stage in catalog.skills_doc.get('stages', [])}
 
     for item in entries:
         name = item.get("name")
+        if item.get('codex') and item.get('stage') not in stages:
+            errors.append(f"{name}: unknown stage")
+        if item.get('codex') and skill_relative_path(catalog, item).parts != (item['stage'], name):
+            errors.append(f"{name}: destination does not match stage")
         path = catalog.root / item.get("path", "")
         if not path.is_dir():
             errors.append(f"{name}: missing directory {item.get('path')}")
@@ -229,9 +285,21 @@ def validate(catalog: Catalog) -> int:
             local_path = catalog.root / item["path"]
             lock_item = locked.get(item["name"])
             if local_path.is_dir() and lock_item:
-                digest = tree_digest(local_path)
+                original_yaml = lock_item.get('upstreamOpenaiYaml')
+                overlays = ('agents/openai.yaml',) if item.get('codex') and original_yaml is None else ()
+                overrides = {'agents/openai.yaml': original_yaml.encode('utf-8')} if original_yaml is not None else {}
+                digest = tree_digest(local_path, overlays, overrides)
                 if digest != lock_item.get("treeSha256"):
                     errors.append(f"{item['name']}: vendored content differs from lock")
+                if item.get('codex'):
+                    overlay = local_path / 'agents/openai.yaml'
+                    if not overlay.is_file() or overlay.read_text() != codex_overlay(item):
+                        errors.append(f"{item['name']}: Codex overlay differs from registry")
+                    if tree_digest(local_path) != lock_item.get('packagedTreeSha256'):
+                        errors.append(f"{item['name']}: packaged content differs from lock")
+                    if lock_item.get('path') != item['path']:
+                        errors.append(f"{item['name']}: packaged path differs from lock")
+                skill_relative_path(catalog, item)
         plugin_root = catalog.root / "plugins" / source["plugin"]
         if not (plugin_root / source["licensePath"]).is_file():
             errors.append(f"{source_id}: preserved license is missing")
@@ -248,6 +316,9 @@ def validate(catalog: Catalog) -> int:
             errors.append(f"{plugin_dir.name}: manifest name mismatch")
 
     catalog_path = catalog.root / "plugins/workflow-hub/skills/workflow-guide/references/catalog.md"
+    stage_path = catalog.root / 'plugins/vendor-mattpocock/README.md'
+    if stages and (not stage_path.is_file() or stage_path.read_text(encoding='utf-8') != render_stage_guide(catalog)):
+        errors.append('generated Matt stage guide is stale; run render-catalog --apply')
     if not catalog_path.is_file() or catalog_path.read_text(encoding="utf-8") != render_catalog(catalog):
         errors.append("generated workflow catalog is stale; run render-catalog --apply")
 
@@ -315,16 +386,28 @@ def sync_vendor(catalog: Catalog, source_id: str, ref: str | None, apply: bool) 
                 raise RuntimeError(f"upstream path missing: {item['origin']['path']}")
             if frontmatter_name(source_path) != item["name"]:
                 raise RuntimeError(f"upstream name mismatch for {item['name']}")
-            destination = stage / item["name"]
+            destination = stage / skill_relative_path(catalog, item)
+            destination.parent.mkdir(parents=True, exist_ok=True)
             shutil.copytree(source_path, destination)
             digest = tree_digest(destination)
+            original_yaml = None
+            if item.get('codex'):
+                overlay = destination / 'agents/openai.yaml'
+                if overlay.exists():
+                    original_yaml = overlay.read_text(encoding='utf-8')
+                overlay.parent.mkdir(exist_ok=True)
+                overlay.write_text(codex_overlay(item), encoding='utf-8')
+            packaged_digest = tree_digest(destination)
             local = catalog.root / item["path"]
-            if not local.is_dir() or tree_digest(local) != digest:
+            if not local.is_dir() or tree_digest(local) != packaged_digest:
                 changed.append(item["name"])
             lock_skills.append({
                 "name": item["name"],
                 "sourcePath": item["origin"]["path"],
                 "treeSha256": digest,
+                "packagedTreeSha256": packaged_digest,
+                "path": item['path'],
+                "upstreamOpenaiYaml": original_yaml,
             })
 
         license_source = checkout / source["licensePath"]
@@ -407,7 +490,7 @@ def remove_skill(catalog: Catalog, name: str, apply: bool) -> int:
 
     target = (catalog.root / item["path"]).resolve()
     expected_parent = (catalog.root / "plugins" / item["plugin"] / "skills").resolve()
-    if target.parent != expected_parent:
+    if not target.is_relative_to(expected_parent) or target == expected_parent or target.name != name:
         raise RuntimeError("refusing removal outside the owning plugin skills directory")
     shutil.rmtree(target)
     catalog.skills_doc["skills"] = [entry for entry in catalog.skills_doc["skills"] if entry["name"] != name]

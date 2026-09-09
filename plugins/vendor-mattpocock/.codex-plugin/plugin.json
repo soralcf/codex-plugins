@@ -1,7 +1,7 @@
 {
   "name": "vendor-mattpocock",
-  "version": "0.1.0+upstream.3cca18b.selection.2bf113eadae2",
-  "description": "A curated, unmodified subset of Matt Pocock's engineering and productivity skills.",
+  "version": "0.1.0+upstream.3cca18b.selection.b762e87ee8ef",
+  "description": "23 Matt Pocock skills organized by work stage, with unchanged skill content and Codex metadata adaptations.",
   "author": {
     "name": "Matt Pocock; packaged by Welkin",
     "url": "https://github.com/mattpocock/skills"
@@ -18,8 +18,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Matt Pocock Skills",
-    "shortDescription": "Curated upstream engineering workflows, kept unchanged.",
-    "longDescription": "A pinned and license-preserving selection of Matt Pocock's stable skills. Vendored skill directories are copied unchanged and updated as complete units.",
+    "shortDescription": "Matt skills by work stage, with Codex invocation metadata.",
+    "longDescription": "23 pinned MIT-licensed Matt Pocock skills in nine numbered stage folders. Original skill content is preserved; agents/openai.yaml is adapted separately with upstream snapshots and hashes.",
     "developerName": "Matt Pocock / Welkin",
     "category": "Developer Tools",
     "capabilities": [

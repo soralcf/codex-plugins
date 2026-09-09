@@ -25,3 +25,14 @@ explicit entry Skill, ordered `skills`, and desired `outcome`. Every referenced 
 
 The generated `workflow-guide/references/catalog.md` is a distribution artifact, not a source of
 truth. Regenerate it from both JSON registries.
+
+## Stage organization and Codex adaptation
+
+- Top-level `stages` lists ordered ids and titles. Numbers aid navigation, not mandatory execution.
+- `stage` selects a stage; `path` is `plugins/<plugin>/skills/<stage>/<name>`.
+- `codex` contains `displayName` and `shortDescription`; the adapter generates a namespaced default prompt and preserves registry invocation mode. Only agents/openai.yaml may change.
+- `requires` includes skills invoked by supported branches so the package is complete; it is not a sequence for the human to execute.
+- `prerequisites` records project configuration and input artifacts, not installable dependencies.
+- The lock retains `treeSha256` for the original upstream tree, `upstreamOpenaiYaml` for its original YAML, `packagedTreeSha256` for the adapted tree, and `path` for placement.
+
+`render-catalog --apply` also generates the Matt README stage/dependency index. WORKFLOWS.md and PROJECT-SETUP.md are maintained packaging documentation.

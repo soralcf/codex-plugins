@@ -5,78 +5,207 @@
       "id": "navigate-skill-library",
       "title": "选择或审计 Skill 工作流",
       "entry": "workflow-guide",
-      "skills": ["workflow-guide"],
+      "skills": [
+        "workflow-guide"
+      ],
       "outcome": "找到合适入口，或得到有证据的精简与补缺建议。"
     },
     {
       "id": "maintain-skill-library",
       "title": "维护 Skill 库",
       "entry": "skill-maintainer",
-      "skills": ["skill-maintainer"],
+      "skills": [
+        "skill-maintainer"
+      ],
       "outcome": "盘点、校验、同步或安全移除 Skill。"
     },
     {
       "id": "learn-a-topic",
       "title": "学习一个主题",
       "entry": "learn-anything",
-      "skills": ["learn-anything"],
+      "skills": [
+        "learn-anything"
+      ],
       "outcome": "形成适合当前目标和基础的理解或学习路线。"
     },
     {
       "id": "clarify-a-plan",
       "title": "把计划问清楚",
       "entry": "grilling",
-      "skills": ["grilling"],
+      "skills": [
+        "grilling"
+      ],
       "outcome": "逐轮解决设计树中的关键决策。"
     },
     {
       "id": "clarify-and-document-design",
       "title": "澄清设计并沉淀领域文档",
       "entry": "grilling",
-      "skills": ["grilling", "domain-modeling"],
+      "skills": [
+        "grilling",
+        "domain-modeling"
+      ],
       "outcome": "解决设计决策，同时维护术语表和必要的 ADR。"
     },
     {
       "id": "improve-codebase-architecture",
       "title": "寻找并讨论代码库架构改进",
       "entry": "codebase-design",
-      "skills": ["codebase-design", "grilling", "domain-modeling"],
+      "skills": [
+        "codebase-design",
+        "grilling",
+        "domain-modeling"
+      ],
       "outcome": "找到值得深化的模块，并把候选方案讨论清楚。"
     },
     {
       "id": "debug-and-prevent-regression",
       "title": "诊断 Bug 并防止回归",
       "entry": "diagnosing-bugs",
-      "skills": ["diagnosing-bugs", "tdd"],
+      "skills": [
+        "diagnosing-bugs",
+        "tdd"
+      ],
       "outcome": "建立可复现反馈环，找到原因并留下回归测试。"
     },
     {
       "id": "prototype-a-design-question",
       "title": "用原型回答设计问题",
       "entry": "prototype",
-      "skills": ["prototype", "codebase-design"],
+      "skills": [
+        "prototype",
+        "codebase-design"
+      ],
       "outcome": "用可丢弃原型验证状态、逻辑或界面方向。"
     },
     {
       "id": "research-a-technical-decision",
       "title": "研究技术问题",
       "entry": "research",
-      "skills": ["research"],
+      "skills": [
+        "research"
+      ],
       "outcome": "从一手来源得到有引用的仓库内研究记录。"
     },
     {
       "id": "resolve-git-conflicts",
       "title": "解决 Git 冲突",
       "entry": "resolving-merge-conflicts",
-      "skills": ["resolving-merge-conflicts"],
+      "skills": [
+        "resolving-merge-conflicts"
+      ],
       "outcome": "按双方变更意图逐块解决 merge 或 rebase 冲突。"
     },
     {
       "id": "create-a-human-wizard",
       "title": "创建人工操作向导",
       "entry": "wizard",
-      "skills": ["wizard"],
+      "skills": [
+        "wizard"
+      ],
       "outcome": "把必须由人完成的配置或迁移步骤做成交互式脚本。"
+    },
+    {
+      "id": "matt-learning",
+      "title": "经营持续学习项目",
+      "entry": "teach",
+      "skills": [
+        "teach",
+        "research",
+        "wait-what"
+      ],
+      "outcome": "维护学习目标、课程与学习记录；研究和重讲按需进入。"
+    },
+    {
+      "id": "matt-delivery",
+      "title": "从需求到交付",
+      "entry": "grilling",
+      "skills": [
+        "grilling",
+        "to-spec",
+        "to-tickets",
+        "implement",
+        "tdd",
+        "code-review"
+      ],
+      "outcome": "规格和任务驱动交付；implement 已包含测试和审查，不需重复手动调用。"
+    },
+    {
+      "id": "matt-wayfinding",
+      "title": "跨会话澄清大型项目",
+      "entry": "wayfinder",
+      "skills": [
+        "wayfinder",
+        "research",
+        "prototype",
+        "grilling",
+        "domain-modeling"
+      ],
+      "outcome": "按决策依赖选择下一步；地图完成不等于实现完成。"
+    },
+    {
+      "id": "matt-triage",
+      "title": "分诊问题与外部请求",
+      "entry": "triage",
+      "skills": [
+        "triage",
+        "diagnosing-bugs",
+        "grilling",
+        "domain-modeling"
+      ],
+      "outcome": "验证事实，形成可交接任务说明并维护状态。"
+    },
+    {
+      "id": "matt-architecture",
+      "title": "探索架构改进",
+      "entry": "improve-codebase-architecture",
+      "skills": [
+        "improve-codebase-architecture",
+        "codebase-design",
+        "grilling",
+        "domain-modeling",
+        "prototype"
+      ],
+      "outcome": "展示候选并选择方向后深入设计。"
+    },
+    {
+      "id": "matt-interview",
+      "title": "显式进入澄清与文档流程",
+      "entry": "grill-me",
+      "skills": [
+        "grill-me",
+        "grilling",
+        "grill-with-docs",
+        "domain-modeling"
+      ],
+      "outcome": "按是否需要沉淀文档选择一个入口；不是四步顺序。"
+    },
+    {
+      "id": "matt-questionnaire",
+      "title": "向他人收集缺失信息",
+      "entry": "to-questionnaire",
+      "skills": [
+        "to-questionnaire"
+      ],
+      "outcome": "生成有明确收件对象和决策目标的问卷。"
+    },
+    {
+      "id": "matt-handoff",
+      "title": "交接上下文",
+      "entry": "handoff",
+      "skills": [
+        "handoff"
+      ],
+      "outcome": "生成引用现有产物且去除敏感信息的交接文档。"
+    },
+    {
+      "id": "matt-agent-docs",
+      "title": "审查 Agent 文档",
+      "entry": "writing-for-agents",
+      "skills": [
+        "writing-for-agents"
+      ],
+      "outcome": "改善上下文指针、信息层级与完成标准。"
     }
   ]
 }

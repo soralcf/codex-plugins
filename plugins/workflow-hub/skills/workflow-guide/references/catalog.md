@@ -82,41 +82,118 @@
 - Chain: `wizard`
 - Outcome: 把必须由人完成的配置或迁移步骤做成交互式脚本。
 
+### 经营持续学习项目
+
+- ID: `matt-learning`
+- Entry: `$teach`
+- Chain: `teach` → `research` → `wait-what`
+- Outcome: 维护学习目标、课程与学习记录；研究和重讲按需进入。
+
+### 从需求到交付
+
+- ID: `matt-delivery`
+- Entry: `$grilling`
+- Chain: `grilling` → `to-spec` → `to-tickets` → `implement` → `tdd` → `code-review`
+- Outcome: 规格和任务驱动交付；implement 已包含测试和审查，不需重复手动调用。
+
+### 跨会话澄清大型项目
+
+- ID: `matt-wayfinding`
+- Entry: `$wayfinder`
+- Chain: `wayfinder` → `research` → `prototype` → `grilling` → `domain-modeling`
+- Outcome: 按决策依赖选择下一步；地图完成不等于实现完成。
+
+### 分诊问题与外部请求
+
+- ID: `matt-triage`
+- Entry: `$triage`
+- Chain: `triage` → `diagnosing-bugs` → `grilling` → `domain-modeling`
+- Outcome: 验证事实，形成可交接任务说明并维护状态。
+
+### 探索架构改进
+
+- ID: `matt-architecture`
+- Entry: `$improve-codebase-architecture`
+- Chain: `improve-codebase-architecture` → `codebase-design` → `grilling` → `domain-modeling` → `prototype`
+- Outcome: 展示候选并选择方向后深入设计。
+
+### 显式进入澄清与文档流程
+
+- ID: `matt-interview`
+- Entry: `$grill-me`
+- Chain: `grill-me` → `grilling` → `grill-with-docs` → `domain-modeling`
+- Outcome: 按是否需要沉淀文档选择一个入口；不是四步顺序。
+
+### 向他人收集缺失信息
+
+- ID: `matt-questionnaire`
+- Entry: `$to-questionnaire`
+- Chain: `to-questionnaire`
+- Outcome: 生成有明确收件对象和决策目标的问卷。
+
+### 交接上下文
+
+- ID: `matt-handoff`
+- Entry: `$handoff`
+- Chain: `handoff`
+- Outcome: 生成引用现有产物且去除敏感信息的交接文档。
+
+### 审查 Agent 文档
+
+- ID: `matt-agent-docs`
+- Entry: `$writing-for-agents`
+- Chain: `writing-for-agents`
+- Outcome: 改善上下文指针、信息层级与完成标准。
+
+## Matt stage navigation
+
+Stage numbers are navigation, not mandatory execution order. See the Matt plugin's README.md and PROJECT-SETUP.md for routes and project prerequisites.
+
+- **00-learning — 学习理解**: `teach`, `wait-what`
+- **10-discovery — 调研与分诊**: `research`, `triage`, `diagnosing-bugs`
+- **20-clarification — 需求与决策澄清**: `wayfinder`, `grilling`, `grill-me`, `grill-with-docs`, `to-questionnaire`
+- **30-design — 设计与验证**: `domain-modeling`, `codebase-design`, `improve-codebase-architecture`, `prototype`
+- **40-planning — 规格与任务拆分**: `to-spec`, `to-tickets`
+- **50-implementation — 实现与测试**: `implement`, `tdd`
+- **60-review-integration — 审查与集成**: `code-review`, `resolving-merge-conflicts`
+- **70-handoff — 交接与人工操作**: `handoff`, `wizard`
+- **90-agent-authoring — Agent 文档维护**: `writing-for-agents`
+
 ## Skills
 
 | Skill | Invocation | Ownership | Source |
 |---|---|---|---|
+| `code-review` | model | vendored | mattpocock@3cca18b |
 | `codebase-design` | model | vendored | mattpocock@3cca18b |
 | `diagnosing-bugs` | model | vendored | mattpocock@3cca18b |
 | `domain-modeling` | model | vendored | mattpocock@3cca18b |
+| `grill-me` | user | vendored | mattpocock@3cca18b |
+| `grill-with-docs` | user | vendored | mattpocock@3cca18b |
 | `grilling` | model | vendored | mattpocock@3cca18b |
+| `handoff` | user | vendored | mattpocock@3cca18b |
+| `implement` | user | vendored | mattpocock@3cca18b |
+| `improve-codebase-architecture` | user | vendored | mattpocock@3cca18b |
 | `learn-anything` | model | original | this repository |
 | `prototype` | model | vendored | mattpocock@3cca18b |
 | `research` | model | vendored | mattpocock@3cca18b |
 | `resolving-merge-conflicts` | model | vendored | mattpocock@3cca18b |
 | `skill-maintainer` | model | original | this repository |
 | `tdd` | model | vendored | mattpocock@3cca18b |
+| `teach` | user | vendored | mattpocock@3cca18b |
+| `to-questionnaire` | user | vendored | mattpocock@3cca18b |
+| `to-spec` | user | vendored | mattpocock@3cca18b |
+| `to-tickets` | user | vendored | mattpocock@3cca18b |
+| `triage` | user | vendored | mattpocock@3cca18b |
+| `wait-what` | user | vendored | mattpocock@3cca18b |
+| `wayfinder` | user | vendored | mattpocock@3cca18b |
 | `wizard` | model | vendored | mattpocock@3cca18b |
 | `workflow-guide` | user | original | this repository |
+| `writing-for-agents` | model | vendored | mattpocock@3cca18b |
 
 ## Deliberate upstream exclusions
 
 - `ask-matt` (mattpocock): Matt-specific router; replaced by the original workflow-guide.
-- `code-review` (mattpocock): Requires the excluded issue-tracker setup when its repository configuration is absent.
-- `grill-me` (mattpocock): Unchanged user-invocation frontmatter is rejected by the Codex plugin validator.
-- `grill-with-docs` (mattpocock): Unchanged user-invocation frontmatter is rejected by the Codex plugin validator.
-- `handoff` (mattpocock): Overlaps Codex's native task and handoff capabilities.
-- `implement` (mattpocock): Orchestrates excluded spec, ticket, and code-review conventions.
-- `improve-codebase-architecture` (mattpocock): Unchanged user-invocation frontmatter is rejected by the Codex plugin validator.
 - `setup-matt-pocock-skills` (mattpocock): Installs Matt-specific repository, issue-tracker, and documentation conventions.
-- `teach` (mattpocock): Overlaps the existing original learn-anything skill.
-- `to-questionnaire` (mattpocock): Unchanged user-invocation frontmatter is rejected by the Codex plugin validator.
-- `to-spec` (mattpocock): Depends on the excluded Matt-specific issue-tracker setup.
-- `to-tickets` (mattpocock): Depends on the excluded Matt-specific issue-tracker setup.
-- `triage` (mattpocock): Depends on the excluded Matt-specific issue-tracker setup.
-- `wait-what` (mattpocock): Unchanged user-invocation frontmatter is rejected by the Codex plugin validator.
-- `wayfinder` (mattpocock): Depends on the excluded Matt-specific issue-tracker setup.
-- `writing-for-agents` (mattpocock): Its unchanged Skill-authoring guidance uses Claude-specific invocation metadata rejected by Codex and overlaps the official skill-creator.
 
 ## Static audit
 
