@@ -8,7 +8,7 @@
       "name": "learn-anything",
       "source": {
         "source": "git-subdir",
-        "url": "https://github.com/soralcf/codex-plugins.git",
+        "url": "git@github.com:soralcf/codex-plugins.git",
         "path": "./plugins/learn-anything",
         "ref": "main"
       },
@@ -22,7 +22,7 @@
       "name": "vendor-mattpocock",
       "source": {
         "source": "git-subdir",
-        "url": "https://github.com/soralcf/codex-plugins.git",
+        "url": "git@github.com:soralcf/codex-plugins.git",
         "path": "./plugins/vendor-mattpocock",
         "ref": "main"
       },
@@ -36,7 +36,7 @@
       "name": "workflow-hub",
       "source": {
         "source": "git-subdir",
-        "url": "https://github.com/soralcf/codex-plugins.git",
+        "url": "git@github.com:soralcf/codex-plugins.git",
         "path": "./plugins/workflow-hub",
         "ref": "main"
       },
