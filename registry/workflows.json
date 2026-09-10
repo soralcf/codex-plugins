@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "workflows": [
     {
       "id": "navigate-skill-library",
@@ -8,7 +8,8 @@
       "skills": [
         "workflow-guide"
       ],
-      "outcome": "找到合适入口，或得到有证据的精简与补缺建议。"
+      "outcome": "找到合适入口，或得到有证据的精简与补缺建议。",
+      "relations": []
     },
     {
       "id": "maintain-skill-library",
@@ -17,7 +18,8 @@
       "skills": [
         "skill-maintainer"
       ],
-      "outcome": "盘点、校验、同步或安全移除 Skill。"
+      "outcome": "盘点、校验、同步或安全移除 Skill。",
+      "relations": []
     },
     {
       "id": "learn-a-topic",
@@ -26,7 +28,8 @@
       "skills": [
         "learn-anything"
       ],
-      "outcome": "形成适合当前目标和基础的理解或学习路线。"
+      "outcome": "形成适合当前目标和基础的理解或学习路线。",
+      "relations": []
     },
     {
       "id": "clarify-a-plan",
@@ -35,7 +38,8 @@
       "skills": [
         "grilling"
       ],
-      "outcome": "逐轮解决设计树中的关键决策。"
+      "outcome": "逐轮解决设计树中的关键决策。",
+      "relations": []
     },
     {
       "id": "clarify-and-document-design",
@@ -45,7 +49,14 @@
         "grilling",
         "domain-modeling"
       ],
-      "outcome": "解决设计决策，同时维护术语表和必要的 ADR。"
+      "outcome": "解决设计决策，同时维护术语表和必要的 ADR。",
+      "relations": [
+        {
+          "from": "grilling",
+          "to": "domain-modeling",
+          "type": "alongside"
+        }
+      ]
     },
     {
       "id": "improve-codebase-architecture",
@@ -56,7 +67,19 @@
         "grilling",
         "domain-modeling"
       ],
-      "outcome": "找到值得深化的模块，并把候选方案讨论清楚。"
+      "outcome": "找到值得深化的模块，并把候选方案讨论清楚。",
+      "relations": [
+        {
+          "from": "codebase-design",
+          "to": "grilling",
+          "type": "sequence"
+        },
+        {
+          "from": "grilling",
+          "to": "domain-modeling",
+          "type": "alongside"
+        }
+      ]
     },
     {
       "id": "debug-and-prevent-regression",
@@ -66,7 +89,14 @@
         "diagnosing-bugs",
         "tdd"
       ],
-      "outcome": "建立可复现反馈环，找到原因并留下回归测试。"
+      "outcome": "建立可复现反馈环，找到原因并留下回归测试。",
+      "relations": [
+        {
+          "from": "diagnosing-bugs",
+          "to": "tdd",
+          "type": "sequence"
+        }
+      ]
     },
     {
       "id": "prototype-a-design-question",
@@ -76,7 +106,15 @@
         "prototype",
         "codebase-design"
       ],
-      "outcome": "用可丢弃原型验证状态、逻辑或界面方向。"
+      "outcome": "用可丢弃原型验证状态、逻辑或界面方向。",
+      "relations": [
+        {
+          "from": "prototype",
+          "to": "codebase-design",
+          "type": "optional",
+          "when": "需要讨论模块接口时"
+        }
+      ]
     },
     {
       "id": "research-a-technical-decision",
@@ -85,7 +123,8 @@
       "skills": [
         "research"
       ],
-      "outcome": "从一手来源得到有引用的仓库内研究记录。"
+      "outcome": "从一手来源得到有引用的仓库内研究记录。",
+      "relations": []
     },
     {
       "id": "resolve-git-conflicts",
@@ -94,7 +133,8 @@
       "skills": [
         "resolving-merge-conflicts"
       ],
-      "outcome": "按双方变更意图逐块解决 merge 或 rebase 冲突。"
+      "outcome": "按双方变更意图逐块解决 merge 或 rebase 冲突。",
+      "relations": []
     },
     {
       "id": "create-a-human-wizard",
@@ -103,7 +143,8 @@
       "skills": [
         "wizard"
       ],
-      "outcome": "把必须由人完成的配置或迁移步骤做成交互式脚本。"
+      "outcome": "把必须由人完成的配置或迁移步骤做成交互式脚本。",
+      "relations": []
     },
     {
       "id": "matt-learning",
@@ -114,7 +155,21 @@
         "research",
         "wait-what"
       ],
-      "outcome": "维护学习目标、课程与学习记录；研究和重讲按需进入。"
+      "outcome": "维护学习目标、课程与学习记录；研究和重讲按需进入。",
+      "relations": [
+        {
+          "from": "teach",
+          "to": "research",
+          "type": "optional",
+          "when": "需要补充一手资料时"
+        },
+        {
+          "from": "teach",
+          "to": "wait-what",
+          "type": "optional",
+          "when": "解释没有被理解时"
+        }
+      ]
     },
     {
       "id": "matt-delivery",
@@ -128,7 +183,34 @@
         "tdd",
         "code-review"
       ],
-      "outcome": "规格和任务驱动交付；implement 已包含测试和审查，不需重复手动调用。"
+      "outcome": "规格和任务驱动交付；implement 已包含测试和审查，不需重复手动调用。",
+      "relations": [
+        {
+          "from": "grilling",
+          "to": "to-spec",
+          "type": "sequence"
+        },
+        {
+          "from": "to-spec",
+          "to": "to-tickets",
+          "type": "sequence"
+        },
+        {
+          "from": "to-tickets",
+          "to": "implement",
+          "type": "sequence"
+        },
+        {
+          "from": "implement",
+          "to": "tdd",
+          "type": "calls"
+        },
+        {
+          "from": "implement",
+          "to": "code-review",
+          "type": "calls"
+        }
+      ]
     },
     {
       "id": "matt-wayfinding",
@@ -141,7 +223,29 @@
         "grilling",
         "domain-modeling"
       ],
-      "outcome": "按决策依赖选择下一步；地图完成不等于实现完成。"
+      "outcome": "按决策依赖选择下一步；地图完成不等于实现完成。",
+      "relations": [
+        {
+          "from": "wayfinder",
+          "to": "research",
+          "type": "calls"
+        },
+        {
+          "from": "wayfinder",
+          "to": "prototype",
+          "type": "calls"
+        },
+        {
+          "from": "wayfinder",
+          "to": "grilling",
+          "type": "calls"
+        },
+        {
+          "from": "wayfinder",
+          "to": "domain-modeling",
+          "type": "calls"
+        }
+      ]
     },
     {
       "id": "matt-triage",
@@ -153,7 +257,25 @@
         "grilling",
         "domain-modeling"
       ],
-      "outcome": "验证事实，形成可交接任务说明并维护状态。"
+      "outcome": "验证事实，形成可交接任务说明并维护状态。",
+      "relations": [
+        {
+          "from": "triage",
+          "to": "diagnosing-bugs",
+          "type": "optional",
+          "when": "需要深入复现和定位故障时"
+        },
+        {
+          "from": "triage",
+          "to": "grilling",
+          "type": "calls"
+        },
+        {
+          "from": "triage",
+          "to": "domain-modeling",
+          "type": "calls"
+        }
+      ]
     },
     {
       "id": "matt-architecture",
@@ -166,7 +288,30 @@
         "domain-modeling",
         "prototype"
       ],
-      "outcome": "展示候选并选择方向后深入设计。"
+      "outcome": "展示候选并选择方向后深入设计。",
+      "relations": [
+        {
+          "from": "improve-codebase-architecture",
+          "to": "codebase-design",
+          "type": "calls"
+        },
+        {
+          "from": "improve-codebase-architecture",
+          "to": "grilling",
+          "type": "calls"
+        },
+        {
+          "from": "improve-codebase-architecture",
+          "to": "domain-modeling",
+          "type": "calls"
+        },
+        {
+          "from": "improve-codebase-architecture",
+          "to": "prototype",
+          "type": "optional",
+          "when": "设计需要具体产物验证时"
+        }
+      ]
     },
     {
       "id": "matt-interview",
@@ -178,7 +323,34 @@
         "grill-with-docs",
         "domain-modeling"
       ],
-      "outcome": "按是否需要沉淀文档选择一个入口；不是四步顺序。"
+      "outcome": "按是否需要沉淀文档选择一个入口；不是四步顺序。",
+      "relations": [
+        {
+          "from": "grill-me",
+          "to": "grill-with-docs",
+          "type": "choice",
+          "when": "需要同步沉淀领域文档时"
+        },
+        {
+          "from": "grill-me",
+          "to": "grilling",
+          "type": "calls"
+        },
+        {
+          "from": "grill-with-docs",
+          "to": "grilling",
+          "type": "calls"
+        },
+        {
+          "from": "grill-with-docs",
+          "to": "domain-modeling",
+          "type": "calls"
+        }
+      ],
+      "entries": [
+        "grill-me",
+        "grill-with-docs"
+      ]
     },
     {
       "id": "matt-questionnaire",
@@ -187,7 +359,8 @@
       "skills": [
         "to-questionnaire"
       ],
-      "outcome": "生成有明确收件对象和决策目标的问卷。"
+      "outcome": "生成有明确收件对象和决策目标的问卷。",
+      "relations": []
     },
     {
       "id": "matt-handoff",
@@ -196,7 +369,8 @@
       "skills": [
         "handoff"
       ],
-      "outcome": "生成引用现有产物且去除敏感信息的交接文档。"
+      "outcome": "生成引用现有产物且去除敏感信息的交接文档。",
+      "relations": []
     },
     {
       "id": "matt-agent-docs",
@@ -205,7 +379,8 @@
       "skills": [
         "writing-for-agents"
       ],
-      "outcome": "改善上下文指针、信息层级与完成标准。"
+      "outcome": "改善上下文指针、信息层级与完成标准。",
+      "relations": []
     }
   ]
 }

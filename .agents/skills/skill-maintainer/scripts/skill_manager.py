@@ -14,6 +14,7 @@ import subprocess
 import sys
 import tempfile
 import uuid
+from transactions import transactional
 
 
 DEFAULT_ROOT = Path(__file__).resolve().parents[4]
@@ -27,8 +28,11 @@ def load_json(path: Path):
 def atomic_json(path: Path, value) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_name(f".{path.name}.{uuid.uuid4().hex}.tmp")
-    temporary.write_text(json.dumps(value, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    os.replace(temporary, path)
+    try:
+        temporary.write_text(json.dumps(value, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        os.replace(temporary, path)
+    finally:
+        temporary.unlink(missing_ok=True)
 
 
 def tree_digest(directory: Path, exclude: tuple[str, ...] = (), overrides: dict | None = None) -> str:
@@ -55,6 +59,25 @@ def codex_overlay(item: dict) -> str:
         "policy:\n"
         f"  allow_implicit_invocation: {'false' if item['invocation'] == 'user' else 'true'}\n"
     )
+
+
+def plugin_version(plugin_root: Path) -> str:
+    manifest = load_json(plugin_root / '.codex-plugin/plugin.json')
+    base = manifest['version'].split('+')[0]
+    manifest['version'] = base
+    normalized = json.dumps(manifest, sort_keys=True, separators=(',', ':')).encode()
+    digest = tree_digest(plugin_root, overrides={'.codex-plugin/plugin.json': normalized})
+    return f'{base}+content.{digest[:16]}'
+
+
+def refresh_versions(catalog: 'Catalog') -> None:
+    for plugin_root in sorted((catalog.root / 'plugins').iterdir()):
+        path = plugin_root / '.codex-plugin/plugin.json'
+        if not path.is_file():
+            continue
+        manifest = load_json(path)
+        manifest['version'] = plugin_version(plugin_root)
+        atomic_json(path, manifest)
 
 
 def skill_relative_path(catalog: 'Catalog', item: dict) -> Path:
@@ -122,16 +145,18 @@ def render_catalog(catalog: Catalog) -> str:
         "",
     ]
     for workflow in catalog.workflows_doc["workflows"]:
-        chain = " → ".join(f"`{name}`" for name in workflow["skills"])
         lines.extend([
             f"### {workflow['title']}",
             "",
             f"- ID: `{workflow['id']}`",
-            f"- Entry: `${workflow['entry']}`",
-            f"- Chain: {chain}",
+            "- Entry: " + ' / '.join(f"`${name}`" for name in workflow.get('entries', [workflow['entry']])),
             f"- Outcome: {workflow['outcome']}",
-            "",
         ])
+        labels = {'sequence': '下一步', 'optional': '按需进入', 'calls': '内部调用', 'choice': '替代入口', 'alongside': '同时配合'}
+        for relation in workflow.get('relations', []):
+            condition = f"（{relation['when']}）" if relation.get('when') else ''
+            lines.append(f"- `{relation['from']}` — {labels.get(relation['type'], relation['type'])}{condition}：`{relation['to']}`")
+        lines.append('')
 
     lines.extend(["## Matt stage navigation", "", "Stage numbers are navigation, not mandatory execution order. See the Matt plugin's README.md and PROJECT-SETUP.md for routes and project prerequisites.", ""])
     for stage in catalog.skills_doc.get('stages', []):
@@ -198,6 +223,7 @@ def render_stage_guide(catalog: Catalog) -> str:
     return '\n'.join(lines)
 
 
+@transactional
 def write_catalog(catalog: Catalog, apply: bool) -> int:
     output = render_catalog(catalog)
     target = catalog.root / "plugins/workflow-hub/skills/workflow-guide/references/catalog.md"
@@ -208,12 +234,7 @@ def write_catalog(catalog: Catalog, apply: bool) -> int:
     target.write_text(output, encoding="utf-8")
     if catalog.skills_doc.get('stages'):
         (catalog.root / 'plugins/vendor-mattpocock/README.md').write_text(render_stage_guide(catalog), encoding='utf-8')
-    manifest_path = catalog.root / "plugins/workflow-hub/.codex-plugin/plugin.json"
-    manifest = load_json(manifest_path)
-    base_version = manifest["version"].split("+")[0]
-    catalog_digest = hashlib.sha256(output.encode()).hexdigest()[:12]
-    manifest["version"] = f"{base_version}+catalog.{catalog_digest}"
-    atomic_json(manifest_path, manifest)
+    refresh_versions(catalog)
     print(f"updated {target.relative_to(catalog.root)}")
     return 0
 
@@ -252,6 +273,36 @@ def validate(catalog: Catalog) -> int:
         for name in workflow.get("skills", []):
             if name not in catalog.skills:
                 errors.append(f"workflow {workflow.get('id')}: unknown skill {name}")
+        members = set(workflow.get('skills', []))
+        workflow_entries = set(workflow.get('entries', [workflow.get('entry')]))
+        if not workflow_entries or not workflow_entries.issubset(members) or workflow.get('entry') not in workflow_entries:
+            errors.append(f"workflow {workflow['id']}: invalid entries")
+        covered = set(workflow_entries)
+        graph = {n: [] for n in members}
+        for relation in workflow.get('relations', []):
+            start, end, kind = relation.get('from'), relation.get('to'), relation.get('type')
+            if start not in members or end not in members or start == end:
+                errors.append(f"workflow {workflow['id']}: invalid relation endpoints")
+                continue
+            covered.update((start, end))
+            if kind not in {'sequence', 'optional', 'calls', 'choice', 'alongside'}:
+                errors.append(f"workflow {workflow['id']}: invalid relation type")
+            if kind in {'choice', 'optional'} and not relation.get('when'):
+                errors.append(f"workflow {workflow['id']}: conditional relation needs when")
+            if kind == 'sequence': graph[start].append(end)
+        if covered != members:
+            errors.append(f"workflow {workflow['id']}: skills missing relationships")
+        visiting, visited = set(), set()
+        def cyclic(node):
+            if node in visiting: return True
+            if node in visited: return False
+            visiting.add(node)
+            if any(cyclic(child) for child in graph[node]): return True
+            visiting.remove(node)
+            visited.add(node)
+            return False
+        if any(cyclic(node) for node in graph):
+            errors.append(f"workflow {workflow['id']}: sequence cycle")
 
     discovered = set()
     for pattern in ("plugins/*/skills/**/SKILL.md", ".agents/skills/*/SKILL.md"):
@@ -314,6 +365,8 @@ def validate(catalog: Catalog) -> int:
         plugin = load_json(manifest)
         if plugin.get("name") != plugin_dir.name:
             errors.append(f"{plugin_dir.name}: manifest name mismatch")
+        if plugin.get('version') != plugin_version(plugin_dir):
+            errors.append(f'{plugin_dir.name}: stale content version; run render-catalog --apply')
 
     catalog_path = catalog.root / "plugins/workflow-hub/skills/workflow-guide/references/catalog.md"
     stage_path = catalog.root / 'plugins/vendor-mattpocock/README.md'
@@ -347,7 +400,7 @@ def remote_head(source: dict) -> str:
     return output.split()[0]
 
 
-def check_upstream(catalog: Catalog, source_id: str) -> int:
+def check_upstream(catalog: Catalog, source_id: str, require_current: bool = False) -> int:
     source = catalog.source(source_id)
     head = remote_head(source)
     lock_path = catalog.root / source["lockPath"]
@@ -355,8 +408,9 @@ def check_upstream(catalog: Catalog, source_id: str) -> int:
     print(f"source:  {source_id}")
     print(f"locked:  {locked or 'none'}")
     print(f"upstream:{head}")
-    print("status:  " + ("current" if locked == head else "update available"))
-    return 0
+    current = locked == head
+    print("status:  " + ("current" if current else "update available"))
+    return 1 if require_current and not current else 0
 
 
 def checkout_source(source: dict, ref: str, destination: Path) -> tuple[str, str]:
@@ -367,6 +421,7 @@ def checkout_source(source: dict, ref: str, destination: Path) -> tuple[str, str
     return commit, committed_at
 
 
+@transactional
 def sync_vendor(catalog: Catalog, source_id: str, ref: str | None, apply: bool) -> int:
     source = catalog.source(source_id)
     selected = catalog.selected(source_id)
@@ -453,18 +508,12 @@ def sync_vendor(catalog: Catalog, source_id: str, ref: str | None, apply: bool) 
         }
         atomic_json(catalog.root / source["lockPath"], lock)
 
-        manifest_path = plugin_root / ".codex-plugin/plugin.json"
-        manifest = load_json(manifest_path)
-        base_version = manifest["version"].split("+")[0]
-        selection_payload = json.dumps(lock_skills, sort_keys=True, separators=(",", ":")).encode()
-        selection_digest = hashlib.sha256(selection_payload).hexdigest()[:12]
-        manifest["version"] = f"{base_version}+upstream.{commit[:7]}.selection.{selection_digest}"
-        atomic_json(manifest_path, manifest)
         write_catalog(catalog, True)
         print("sync applied")
         return 0
 
 
+@transactional
 def remove_skill(catalog: Catalog, name: str, apply: bool) -> int:
     item = catalog.skills.get(name)
     if not item:
@@ -512,10 +561,18 @@ def parser() -> argparse.ArgumentParser:
     inventory_parser = commands.add_parser("inventory")
     inventory_parser.add_argument("--json", action="store_true")
     commands.add_parser("validate")
+    doctor_parser = commands.add_parser('doctor')
+    doctor_parser.add_argument('--project', type=Path, required=True)
+    selection = doctor_parser.add_mutually_exclusive_group()
+    selection.add_argument('--skill')
+    selection.add_argument('--workflow')
+    doctor_parser.add_argument('--spec')
+    doctor_parser.add_argument('--json', action='store_true')
     render_parser = commands.add_parser("render-catalog")
     render_parser.add_argument("--apply", action="store_true")
     check_parser = commands.add_parser("check-upstream")
     check_parser.add_argument("--source", required=True)
+    check_parser.add_argument('--require-current', action='store_true')
     sync_parser = commands.add_parser("sync-vendor")
     sync_parser.add_argument("--source", required=True)
     sync_parser.add_argument("--ref")
@@ -534,10 +591,13 @@ def main() -> int:
             return inventory(catalog, args.json)
         if args.command == "validate":
             return validate(catalog)
+        if args.command == 'doctor':
+            from project_doctor import doctor
+            return doctor(catalog, args.project, args.skill, args.workflow, args.spec, args.json)
         if args.command == "render-catalog":
             return write_catalog(catalog, args.apply)
         if args.command == "check-upstream":
-            return check_upstream(catalog, args.source)
+            return check_upstream(catalog, args.source, args.require_current)
         if args.command == "sync-vendor":
             return sync_vendor(catalog, args.source, args.ref, args.apply)
         if args.command == "remove":

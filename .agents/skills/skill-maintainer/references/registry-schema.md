@@ -21,7 +21,10 @@ the current reason. Move or remove an exclusion when the decision changes; never
 both the selected Skill list and exclusions.
 
 `registry/workflows.json` contains named compositions. Each workflow has an `id`, human title,
-explicit entry Skill, ordered `skills`, and desired `outcome`. Every referenced Skill must exist.
+primary `entry`, optional `entries`, member `skills`, typed `relations`, and desired `outcome`.
+Relations use `sequence`, `optional`, `calls`, `choice`, or `alongside`; conditional choices and
+optional edges include `when`. Every member is an entry or participates in a relation. Sequence
+edges must be acyclic. The member list records coverage and does not imply an execution order.
 
 The generated `workflow-guide/references/catalog.md` is a distribution artifact, not a source of
 truth. Regenerate it from both JSON registries.

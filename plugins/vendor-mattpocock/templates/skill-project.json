@@ -1,0 +1,11 @@
+{
+  "issueTracker": "docs/agents/issue-tracker.md",
+  "triageLabels": "docs/agents/triage-labels.md",
+  "domainGuide": "docs/agents/domain.md",
+  "glossary": "CONTEXT.md",
+  "agentInstructions": "AGENTS.md",
+  "checks": [
+    "replace with this project's test command",
+    "replace with this project's lint or typecheck command"
+  ]
+}

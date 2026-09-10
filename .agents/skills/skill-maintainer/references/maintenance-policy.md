@@ -34,6 +34,10 @@ For the Matt package, retain original frontmatter even when the bundled static v
 - Derive cachebusters from both the upstream commit and selected-content hash, so changing the
   selection at the same commit cannot reuse a stale installed cache.
 - Review the upstream diff before applying a new commit.
+- Serialize applied maintenance per repository. Snapshot `plugins/` and `registry/` before mutation,
+  reject stale in-memory registries, and restore the snapshot when any later write fails.
+- Compute every plugin version from its complete packaged content with the version field normalized,
+  so synchronization, removal, generated documentation, and metadata edits all invalidate caches.
 
 ## Removal requirements
 

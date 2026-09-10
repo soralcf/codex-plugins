@@ -28,9 +28,10 @@ when changing either registry.
 ## Choose the operation
 
 - **Inventory or audit:** use `inventory` and `validate`. These are read-only.
+- **Check project prerequisites:** run `doctor --project <path>` with either `--skill <name>` or `--workflow <id>`. Add `--spec <path>` for a local spec. It only checks local presence and never runs configured commands or contacts a tracker.
 - **Verify Codex loading:** run `python3 .agents/skills/skill-maintainer/scripts/verify_codex_plugin.py`; it installs a copy in a temporary CODEX_HOME and checks every selected name and file hash without changing the user installation.
 - **Refresh the guide:** run `render-catalog`; add `--apply` only when the generated diff is intended.
-- **Check upstream:** run `check-upstream --source <id>`. This is read-only but needs network access.
+- **Check upstream:** run `check-upstream --source <id>`. Add `--require-current` in scheduled automation so an available update produces a failing signal. This is read-only but needs network access.
 - **Sync selected third-party skills:** first run `sync-vendor --source <id>` without `--apply`.
   Review the commit and changed skill list, then run again with `--apply` when the user requested
   the update.

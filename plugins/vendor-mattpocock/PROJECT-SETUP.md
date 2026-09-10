@@ -21,6 +21,15 @@
 
 可从 [本地 tracker 模板](templates/issue-tracker-local.md) 起步。这份模板只定义存储接口，不修改任何 skill。若启用外部 PR 分诊，另行明确作者范围、PR/issue 编号解析以及 PR 验证步骤；模板默认不启用。
 
+可将 [项目配置示例](templates/skill-project.json) 复制为项目根目录的 `.skill-project.json`，按项目填写路径和检查命令。然后从 marketplace 仓库运行只读检查：
+
+```bash
+python3 .agents/skills/skill-maintainer/scripts/skill_manager.py doctor \
+  --project /absolute/project/path --workflow matt-delivery --spec path/to/spec.md
+```
+
+也可以用 `--skill implement` 只检查一个入口。doctor 会展开调用依赖，只检查本地文件是否存在且非空，不执行命令、不连接 tracker，也不判断内容是否正确。缺失项退出码为 1；仅有提示时退出码为 0。
+
 ## 使用前要明确的行为
 
 - to-spec/to-tickets 会向配置的载体发布；triage 会更新状态，部分结果会关闭任务。用户调用时应明确操作对象和范围。

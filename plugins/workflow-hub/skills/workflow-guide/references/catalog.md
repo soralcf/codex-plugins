@@ -9,140 +9,147 @@
 
 - ID: `navigate-skill-library`
 - Entry: `$workflow-guide`
-- Chain: `workflow-guide`
 - Outcome: 找到合适入口，或得到有证据的精简与补缺建议。
 
 ### 维护 Skill 库
 
 - ID: `maintain-skill-library`
 - Entry: `$skill-maintainer`
-- Chain: `skill-maintainer`
 - Outcome: 盘点、校验、同步或安全移除 Skill。
 
 ### 学习一个主题
 
 - ID: `learn-a-topic`
 - Entry: `$learn-anything`
-- Chain: `learn-anything`
 - Outcome: 形成适合当前目标和基础的理解或学习路线。
 
 ### 把计划问清楚
 
 - ID: `clarify-a-plan`
 - Entry: `$grilling`
-- Chain: `grilling`
 - Outcome: 逐轮解决设计树中的关键决策。
 
 ### 澄清设计并沉淀领域文档
 
 - ID: `clarify-and-document-design`
 - Entry: `$grilling`
-- Chain: `grilling` → `domain-modeling`
 - Outcome: 解决设计决策，同时维护术语表和必要的 ADR。
+- `grilling` — 同时配合：`domain-modeling`
 
 ### 寻找并讨论代码库架构改进
 
 - ID: `improve-codebase-architecture`
 - Entry: `$codebase-design`
-- Chain: `codebase-design` → `grilling` → `domain-modeling`
 - Outcome: 找到值得深化的模块，并把候选方案讨论清楚。
+- `codebase-design` — 下一步：`grilling`
+- `grilling` — 同时配合：`domain-modeling`
 
 ### 诊断 Bug 并防止回归
 
 - ID: `debug-and-prevent-regression`
 - Entry: `$diagnosing-bugs`
-- Chain: `diagnosing-bugs` → `tdd`
 - Outcome: 建立可复现反馈环，找到原因并留下回归测试。
+- `diagnosing-bugs` — 下一步：`tdd`
 
 ### 用原型回答设计问题
 
 - ID: `prototype-a-design-question`
 - Entry: `$prototype`
-- Chain: `prototype` → `codebase-design`
 - Outcome: 用可丢弃原型验证状态、逻辑或界面方向。
+- `prototype` — 按需进入（需要讨论模块接口时）：`codebase-design`
 
 ### 研究技术问题
 
 - ID: `research-a-technical-decision`
 - Entry: `$research`
-- Chain: `research`
 - Outcome: 从一手来源得到有引用的仓库内研究记录。
 
 ### 解决 Git 冲突
 
 - ID: `resolve-git-conflicts`
 - Entry: `$resolving-merge-conflicts`
-- Chain: `resolving-merge-conflicts`
 - Outcome: 按双方变更意图逐块解决 merge 或 rebase 冲突。
 
 ### 创建人工操作向导
 
 - ID: `create-a-human-wizard`
 - Entry: `$wizard`
-- Chain: `wizard`
 - Outcome: 把必须由人完成的配置或迁移步骤做成交互式脚本。
 
 ### 经营持续学习项目
 
 - ID: `matt-learning`
 - Entry: `$teach`
-- Chain: `teach` → `research` → `wait-what`
 - Outcome: 维护学习目标、课程与学习记录；研究和重讲按需进入。
+- `teach` — 按需进入（需要补充一手资料时）：`research`
+- `teach` — 按需进入（解释没有被理解时）：`wait-what`
 
 ### 从需求到交付
 
 - ID: `matt-delivery`
 - Entry: `$grilling`
-- Chain: `grilling` → `to-spec` → `to-tickets` → `implement` → `tdd` → `code-review`
 - Outcome: 规格和任务驱动交付；implement 已包含测试和审查，不需重复手动调用。
+- `grilling` — 下一步：`to-spec`
+- `to-spec` — 下一步：`to-tickets`
+- `to-tickets` — 下一步：`implement`
+- `implement` — 内部调用：`tdd`
+- `implement` — 内部调用：`code-review`
 
 ### 跨会话澄清大型项目
 
 - ID: `matt-wayfinding`
 - Entry: `$wayfinder`
-- Chain: `wayfinder` → `research` → `prototype` → `grilling` → `domain-modeling`
 - Outcome: 按决策依赖选择下一步；地图完成不等于实现完成。
+- `wayfinder` — 内部调用：`research`
+- `wayfinder` — 内部调用：`prototype`
+- `wayfinder` — 内部调用：`grilling`
+- `wayfinder` — 内部调用：`domain-modeling`
 
 ### 分诊问题与外部请求
 
 - ID: `matt-triage`
 - Entry: `$triage`
-- Chain: `triage` → `diagnosing-bugs` → `grilling` → `domain-modeling`
 - Outcome: 验证事实，形成可交接任务说明并维护状态。
+- `triage` — 按需进入（需要深入复现和定位故障时）：`diagnosing-bugs`
+- `triage` — 内部调用：`grilling`
+- `triage` — 内部调用：`domain-modeling`
 
 ### 探索架构改进
 
 - ID: `matt-architecture`
 - Entry: `$improve-codebase-architecture`
-- Chain: `improve-codebase-architecture` → `codebase-design` → `grilling` → `domain-modeling` → `prototype`
 - Outcome: 展示候选并选择方向后深入设计。
+- `improve-codebase-architecture` — 内部调用：`codebase-design`
+- `improve-codebase-architecture` — 内部调用：`grilling`
+- `improve-codebase-architecture` — 内部调用：`domain-modeling`
+- `improve-codebase-architecture` — 按需进入（设计需要具体产物验证时）：`prototype`
 
 ### 显式进入澄清与文档流程
 
 - ID: `matt-interview`
-- Entry: `$grill-me`
-- Chain: `grill-me` → `grilling` → `grill-with-docs` → `domain-modeling`
+- Entry: `$grill-me` / `$grill-with-docs`
 - Outcome: 按是否需要沉淀文档选择一个入口；不是四步顺序。
+- `grill-me` — 替代入口（需要同步沉淀领域文档时）：`grill-with-docs`
+- `grill-me` — 内部调用：`grilling`
+- `grill-with-docs` — 内部调用：`grilling`
+- `grill-with-docs` — 内部调用：`domain-modeling`
 
 ### 向他人收集缺失信息
 
 - ID: `matt-questionnaire`
 - Entry: `$to-questionnaire`
-- Chain: `to-questionnaire`
 - Outcome: 生成有明确收件对象和决策目标的问卷。
 
 ### 交接上下文
 
 - ID: `matt-handoff`
 - Entry: `$handoff`
-- Chain: `handoff`
 - Outcome: 生成引用现有产物且去除敏感信息的交接文档。
 
 ### 审查 Agent 文档
 
 - ID: `matt-agent-docs`
 - Entry: `$writing-for-agents`
-- Chain: `writing-for-agents`
 - Outcome: 改善上下文指针、信息层级与完成标准。
 
 ## Matt stage navigation
